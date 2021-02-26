@@ -2,10 +2,10 @@
 // 卡类型
 var BankType;
 (function (BankType) {
-    BankType[BankType["Debit"] = 1] = "Debit";
-    BankType[BankType["Credit"] = 2] = "Credit";
-    BankType[BankType["QuasiCredit"] = 3] = "QuasiCredit";
-    BankType[BankType["MasterCard"] = 4] = "MasterCard";
+    BankType["Debit"] = "\u501F\u8BB0\u5361";
+    BankType["Credit"] = "\u8D37\u8BB0\u5361";
+    BankType["QuasiCredit"] = "\u51C6\u8D37\u8BB0\u5361";
+    BankType["MasterCard"] = "\u4FE1\u7528\u5361";
 })(BankType || (BankType = {}));
 var BANK_CONFIG = [
     ["435745", "深圳发展银行", "沃尔玛百分卡", "16", BankType.Credit],
@@ -499,12 +499,12 @@ var BANK_CONFIG = [
     ["68580", "广东发展银行", "广发VISA信用卡", "16", BankType.MasterCard],
 ];
 // 借记卡 1  贷记卡 2 准贷记卡 3 信用卡 4
-var BANK_TYPE = {
-    1: "借记卡",
-    2: "贷记卡",
-    3: "准贷记卡",
-    4: "信用卡",
-};
+// const BANK_TYPE = {
+//   1: "借记卡",
+//   2: "贷记卡",
+//   3: "准贷记卡",
+//   4: "信用卡",
+// };
 /**
    *
    * @param {string} bankcard
@@ -532,7 +532,19 @@ var getVerificationCode = function (bankcard) {
 var bcBuilder = function (num, bankType) {
     // 获取所有类型卡号前缀
     var banks = bankType ? BANK_CONFIG.filter(function (c) { return c[4] === bankType; }) : BANK_CONFIG;
-    Array.apply(null, [{ length: num }]).map(function (bank) {
-        return '1';
+    var bankList = Array(num).fill('');
+    return bankList.map(function () {
+        var bankInfo = banks[random(banks.length)];
+        var totalLen = bankInfo[3]; // 银行卡总长度
+        var prefix = bankInfo[0]; // 相关类型卡的前缀
+        var cardNo = prefix + Array(totalLen - prefix.length - 1).fill('').map(function () { return random(10); }).join('');
+        cardNo = cardNo + getVerificationCode(cardNo);
+        var type = bankInfo[4];
+        return [cardNo, bankInfo[1] + '(' + type + ')'];
     });
 };
+/**
+ *
+ * @param {number} l
+ */
+var random = function (l) { return Math.floor(Math.random() * l); };

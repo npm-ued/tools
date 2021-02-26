@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate BankCard</title>
+  <script src="./bankCard.js"></script>
+</head>
+<body>
+  <div>
+    <select id="bankType">
+      <option value="借记卡">借记卡</option>
+      <option value="贷记卡">贷记卡</option>
+      <option value="准贷记卡">准贷记卡</option>
+      <option value="信用卡">信用卡</option>
+    </select>
+    <button onClick="getCards()">生成20张随机的银行卡号</button>
+    <fieldset>
+      <legend>卡号列表</legend>
+      <div id="cards"></div>
+    </fieldset>
+  </div>
+  <script>
+    function getCards() {
+      var bankType = document.getElementById("bankType").value || ''
+      document.getElementById("cards").innerHTML = bcBuilder(20, bankType).join('<br/>')
+    }
+  </script>
+</body>
+</html>
